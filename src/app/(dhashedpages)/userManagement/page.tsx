@@ -79,45 +79,45 @@ const UserManagement = () => {
   >([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // useEffect(() => {
-  //   const tok =
-  //     typeof window !== "undefined" ? localStorage.getItem("token") : null;
-  //   if (tok) {
-  //     fetch(`${baseURL}/app-users/all-roles/${tok}`, {
-  //       method: "GET",
-  //     })
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         setAllRole(data);
-  //         console.log(data);
-  //         setLoading(false);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error fetching data:", error);
-  //         setLoading(false);
-  //       });
-  //   }
-  // }, []);
+  useEffect(() => {
+    const tok =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    if (tok) {
+      fetch(`${baseURL}/app-users/all-roles/${tok}`, {
+        method: "GET",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setAllRole(data);
+          console.log(data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          setLoading(false);
+        });
+    }
+  }, []);
 
-  // useEffect(() => {
-  //   const tok =
-  //     typeof window !== "undefined" ? localStorage.getItem("token") : null;
-  //   if (tok) {
-  //     fetch(`${baseURL}/app-users/get-all-app-user/${tok}`, {
-  //       method: "GET",
-  //     })
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         setUsers(data);
-  //         // console.log(data);
-  //         setLoading(false);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error fetching data:", error);
-  //         setLoading(false);
-  //       });
-  //   }
-  // }, []);
+  useEffect(() => {
+    const tok =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    if (tok) {
+      fetch(`${baseURL}/app-users/get-all-app-user/${tok}`, {
+        method: "GET",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setUsers(data);
+          // console.log(data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          setLoading(false);
+        });
+    }
+  }, []);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     {

@@ -54,9 +54,9 @@ export default function BarChart() {
     }
   }
 
-  // useEffect(() => {
-  //   fetcherFun();
-  // }, []);
+  useEffect(() => {
+    fetcherFun();
+  }, []);
 
   useEffect(() => {
     if (!canvasRef.current) return;

@@ -35,14 +35,17 @@ import {
   Tr,
   useDisclosure,
 } from "@chakra-ui/react";
-import { fetchExternalImage } from "next/dist/server/image-optimizer";
-import { data, div } from "framer-motion/client";
+
 import { toast, ToastContainer } from "react-toastify";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const DataLogs = () => {
   const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+
+  const token = localStorage.getItem("token");
+
+  // console.log(token , "token");
 
   const [rowData, setRowData] = useState<any[]>([]);
   // const [isLoading, setIsLoading] = useState(false);
@@ -198,16 +201,16 @@ const DataLogs = () => {
       );
 
       const data = await response.json();
-      // console.log(data);
+      console.log(data);
       setRowData(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   }
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   //csv file
   const convertToCSV = (data: any[]) => {

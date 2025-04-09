@@ -59,6 +59,15 @@ export default function RootLayout({
 
  const [permit , setPermit] = useState("");
 
+   useEffect(() => {
+     const token =
+       typeof window !== "undefined" ? localStorage.getItem("token") : null;
+     if (!token) {
+       console.warn("No User found, redirecting to login...");
+       window.location.href = "/auth/login";
+     }
+
+   }, []);
 
   useEffect(() => {
     setActive(basePath as NavItem);
