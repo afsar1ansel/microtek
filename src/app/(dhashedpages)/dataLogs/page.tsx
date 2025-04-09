@@ -43,9 +43,6 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 const DataLogs = () => {
   const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
-  const token = localStorage.getItem("token");
-
-  // console.log(token , "token");
 
   const [rowData, setRowData] = useState<any[]>([]);
   // const [isLoading, setIsLoading] = useState(false);
@@ -201,7 +198,7 @@ const DataLogs = () => {
       );
 
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       setRowData(data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -273,10 +270,10 @@ const DataLogs = () => {
    const [summaryData, setSummaryData] = useState(null);
 
   async function handleSummary(data: any) {
-    console.log(data.scanned_file_log_id);
-
+    // console.log(data.scanned_file_log_id);
     const token =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
       try{
         const response = await fetch(
           `${baseURL}/app/reports/summary/${token}/${data.scanned_file_log_id}`,
