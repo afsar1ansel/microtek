@@ -259,14 +259,27 @@ const Profile = () => {
   return (
     <div className={styles.container}>
       <div className={styles.hello}>
-        <div >
-          <GoMail size={20} color="#848F8B" />
-          <p>Email Support</p>
-        </div>
-        <div>
-          <IoCall size={20} color="#848F8B" />
-          <p>Call Assistance</p>
-        </div>
+        <p style={{ color: "#848F8B",}} >Support :</p>
+        <a
+          href="mailto:bhawna.arya@microtek.in"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <GoMail size={20} color="#848F8B" />
+            {/* <p>Email Support</p> */}
+            <p>bhawna.arya@microtek.in</p>
+          </div>
+        </a>
+        <a
+          href="tel:+918447565934"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <IoCall size={20} color="#848F8B" />
+            {/* <p>Call Assistance</p>${`\n`} */}
+            <p>+91 8447565934</p>
+          </div>
+        </a>
       </div>
 
       <div className={styles.mainBody}>

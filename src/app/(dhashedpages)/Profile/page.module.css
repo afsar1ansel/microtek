@@ -28,7 +28,7 @@
   align-items: center;
 }
 
-.hello :hover {
+.hello a:nth-child(n+2):hover {
   background-color: #d6d6d6f8;
   cursor: pointer;
 }
