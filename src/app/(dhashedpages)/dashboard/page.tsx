@@ -8,7 +8,6 @@ import { IoMdPaper } from "react-icons/io";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import BarChart from "@/app/componants/BarChart";
 import LineChart from "@/app/componants/LineChart";
-import PieChart from "@/app/componants/PieChart";
 
 import { useMyContext } from "@/app/context/MyContext";
 import { useEffect, useState } from "react";
@@ -42,7 +41,6 @@ export default function Home() {
     // Redirect logic
     if (permit === "") {
       // If permit is not set, redirect to login
-      console.warn("No permit found, redirecting to login...");
       window.location.href = "/auth/login";
       return;
     }
@@ -97,6 +95,11 @@ export default function Home() {
       setActiveUsers(data.activeUsers);
       setTotalUpload(data.totalReportUploadedToday);
       console.log(data);
+       if (data.message === "Invalid Token") {
+        // console.log("Invalid token, redirecting to login...");
+        window.location.href = "/auth/login";
+        return;
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     }

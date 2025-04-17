@@ -121,7 +121,7 @@ const DataLogs = () => {
       filter: false,
       cellRenderer: (params: any) => (
         <div style={{ color: params.data.status === 1 ? "green" : "red" }}>
-          {params.data.status === 1 ? "Avilable" : "Failed"}
+          {params.data.status === 1 ? "Available" : "Failed"}
         </div>
       ),
     },

@@ -83,7 +83,7 @@ export default function Login() {
             <label htmlFor="email">Email</label>
             <input
               id="email"
-              type="email"
+              type="text"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
