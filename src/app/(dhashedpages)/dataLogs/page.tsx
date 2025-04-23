@@ -112,7 +112,6 @@ const DataLogs = () => {
     {
       field: "upload_date",
       headerName: "Upload Date",
-      maxWidth: 150,
     },
     {
       field: "status",
