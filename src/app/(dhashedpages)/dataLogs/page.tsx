@@ -8,7 +8,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import type { ColDef } from "ag-grid-community";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import styles from "./page.module.css";
-import { FaRegCopy } from "react-icons/fa";
+// import { baseURL } from "@/utils/constants";
 import { PiFilePdf } from "react-icons/pi";
 import {
   Button,
@@ -42,35 +42,32 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 
 const DataLogs = () => {
   const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-
-
   const [rowData, setRowData] = useState<any[]>([]);
   // const [isLoading, setIsLoading] = useState(false);
-    const handleIconClick = (
-      event: React.MouseEvent,
-      type: "csv" | "pdf",
-      id: string
-    ) => {
-      // Highlight the clicked icon
-      const iconElement = event.currentTarget as HTMLElement;
-      iconElement.style.color = "rgba(13, 94, 54, 1)";
+  const handleIconClick = (
+    event: React.MouseEvent,
+    type: "csv" | "pdf",
+    id: string
+  ) => {
+    // Highlight the clicked icon
+    const iconElement = event.currentTarget as HTMLElement;
+    iconElement.style.color = "rgba(13, 94, 54, 1)";
 
-      // Perform the download action
-      if (type === "csv") {
-        downloadCSV(id);
-        setTimeout(() => {
-          iconElement.style.color = "inherit";
-        }, 500);
-      } else if (type === "pdf") {
-        downloadPDf(id);
-        setTimeout(() => {
-          iconElement.style.color = "inherit";
-        },500);
-        // iconElement.style.color = "inherit";
-      }
-    };
-  
-    
+    // Perform the download action
+    if (type === "csv") {
+      downloadCSV(id);
+      setTimeout(() => {
+        iconElement.style.color = "inherit";
+      }, 500);
+    } else if (type === "pdf") {
+      downloadPDf(id);
+      setTimeout(() => {
+        iconElement.style.color = "inherit";
+      }, 500);
+      // iconElement.style.color = "inherit";
+    }
+  };
+
   const [slNo, setslNo] = useState(1);
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     {
@@ -112,6 +109,15 @@ const DataLogs = () => {
     {
       field: "upload_date",
       headerName: "Upload Date",
+      valueFormatter: (params) => {
+        if (!params.value) return "";
+        // Extracts the date part and formats it as "DD/MM/YY"
+        const date = new Date(params.value);
+        const day = date.getDate().toString().padStart(2, "0");
+        const month = (date.getMonth() + 1).toString().padStart(2, "0");
+        const year = date.getFullYear().toString().slice(-2);
+        return `${day}/${month}/${year}`;
+      },
     },
     {
       field: "status",
@@ -139,14 +145,31 @@ const DataLogs = () => {
           >
             <PiFileCsvDuotone size={30} />
           </div>
-          <div
-            style={{ cursor: "pointer" }}
-            onClick={(e) =>
-              handleIconClick(e, "pdf", params.data.saved_file_name)
-            }
-          >
-            <PiFilePdf size={30} />
-          </div>
+          {params.data.saved_file_name == null ? (
+            <div style={{ position: "relative", cursor: "not-allowed" }}>
+              <PiFilePdf size={30} color="red" />
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%) rotate(45deg)",
+                  width: "30px",
+                  height: "2px",
+                  backgroundColor: "black",
+                }}
+              />
+            </div>
+          ) : (
+            <div
+              style={{ cursor: "pointer" }}
+              onClick={(e) =>
+                handleIconClick(e, "pdf", params.data.saved_file_name)
+              }
+            >
+              <PiFilePdf size={30} />
+            </div>
+          )}
         </div>
       ),
     },
@@ -167,7 +190,6 @@ const DataLogs = () => {
       const data = await response.blob();
       // console.log(data);
 
-
       const url = window.URL.createObjectURL(data);
       const link = document.createElement("a");
       link.href = url;
@@ -177,9 +199,9 @@ const DataLogs = () => {
       console.error("Error downloading PDF:", error);
       toast.error("Failed to download PDF. Please try again.");
     } finally {
-       setTimeout(() => {
-         onLoadClose();
-       }, 1000);
+      setTimeout(() => {
+        onLoadClose();
+      }, 1000);
     }
   }
 
@@ -198,6 +220,11 @@ const DataLogs = () => {
 
       const data = await response.json();
       console.log(data);
+      if (data.message === "Invalid Token") {
+        // console.log("Invalid token, redirecting to login...");
+        window.location.href = "/auth/login";
+        return;
+      }
       setRowData(data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -263,68 +290,64 @@ const DataLogs = () => {
     onClose: onLoadClose,
   } = useDisclosure();
 
-
-
-   const { isOpen, onOpen, onClose } = useDisclosure();
-   const [summaryData, setSummaryData] = useState(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [summaryData, setSummaryData] = useState(null);
 
   async function handleSummary(data: any) {
     // console.log(data.scanned_file_log_id);
     const token =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-      try{
-        const response = await fetch(
-          `${baseURL}/app/reports/summary/${token}/${data.scanned_file_log_id}`,
-          {
-            method: "GET",
-          }
-        );
+    try {
+      const response = await fetch(
+        `${baseURL}/app/reports/summary/${token}/${data.scanned_file_log_id}`,
+        {
+          method: "GET",
+        }
+      );
 
-        const datas = await response.json();
-          setSummaryData(datas);
-        console.log(datas);
-        onOpen();
-        
-      }catch(error){
-        console.error("Error fetching data:", error);
-      }
+      const datas = await response.json();
+      setSummaryData(datas);
+      console.log(datas);
+      onOpen();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   }
 
-const renderValue = (value: any): React.ReactNode => {
-  if (value === null || value === undefined) {
-    return "N/A"; // Fallback for null or undefined
-  }
-
-  if (typeof value === "object" && !Array.isArray(value)) {
-    if (Object.keys(value).length === 0) {
-      return "N/A"; // Fallback for empty objects
+  const renderValue = (value: any): React.ReactNode => {
+    if (value === null || value === undefined) {
+      return "N/A"; // Fallback for null or undefined
     }
 
-    return Object.entries(value).map(([subKey, subValue]) => (
-      <div key={subKey}>
-        <strong>{formatKey(subKey)}:</strong>{" "}
-        {subValue !== null && subValue !== undefined
-          ? renderValue(subValue)
-          : "N/A"}
-      </div>
-    ));
-  }
+    if (typeof value === "object" && !Array.isArray(value)) {
+      if (Object.keys(value).length === 0) {
+        return "N/A"; // Fallback for empty objects
+      }
 
-  return value; // Render primitive values directly
-};
+      return Object.entries(value).map(([subKey, subValue]) => (
+        <div key={subKey}>
+          <strong>{formatKey(subKey)}:</strong>{" "}
+          {subValue !== null && subValue !== undefined
+            ? renderValue(subValue)
+            : "N/A"}
+        </div>
+      ));
+    }
 
-// Helper function to format camelCase keys into human-readable format
-const formatKey = (key: string): string => {
-  // Split camelCase into words
-  const words = key.replace(/([A-Z])/g, " $1").trim();
-  // Capitalize the first letter of each word
-  return words
-    .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-};
+    return value; // Render primitive values directly
+  };
 
+  // Helper function to format camelCase keys into human-readable format
+  const formatKey = (key: string): string => {
+    // Split camelCase into words
+    const words = key.replace(/([A-Z])/g, " $1").trim();
+    // Capitalize the first letter of each word
+    return words
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
 
   return (
     <div style={{ width: "80vw", height: "60vh", maxWidth: "1250px" }}>
@@ -369,7 +392,7 @@ const formatKey = (key: string): string => {
             pagination={true}
             paginationPageSize={5}
             paginationPageSizeSelector={[5, 10, 15]}
-            paginationAutoPageSize={true}
+            // paginationAutoPageSize={true}
             defaultColDef={{
               sortable: true,
               filter: true,

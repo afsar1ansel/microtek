@@ -44,16 +44,19 @@ export default function Login() {
         username?: string;
       } = await response.json();
 
+      console.log(res);
+
       // console.log(res);
       if (res.errFlag === 0 && res.token) {
         setState(res.token);
         localStorage.setItem("token", res.token);
         localStorage.setItem("username", res.username ?? "Admin");
-       if (res.modules_permitted !== undefined) {
-         localStorage.setItem("permits", res.modules_permitted);
-       }else{
-         localStorage.setItem("permits", "Nan");
-       }
+        localStorage.setItem("email", email);
+        if (res.modules_permitted !== undefined) {
+          localStorage.setItem("permits", res.modules_permitted);
+        } else {
+          localStorage.setItem("permits", "Nan");
+        }
         // console.log(res);
         router.push("/dashboard");
       } else {
@@ -79,7 +82,7 @@ export default function Login() {
         </div>
         <div>
           <form className={style.formbox} onSubmit={handleSubmit}>
-          <h2>Login to your account</h2>
+            <h2>Login to your account</h2>
             <label htmlFor="email">Email</label>
             <input
               id="email"
