@@ -92,7 +92,7 @@ const DataLogs = () => {
       ),
     },
     {
-      field: "username",
+      field: "user_id",
       headerName: "Engg Id",
       filter: "agTextColumnFilter",
     },
@@ -219,7 +219,7 @@ const DataLogs = () => {
       );
 
       const data = await response.json();
-      console.log(data);
+      console.log({ data });
       if (data.message === "Invalid Token") {
         // console.log("Invalid token, redirecting to login...");
         window.location.href = "/auth/login";
